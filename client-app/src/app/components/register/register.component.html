@@ -1,0 +1,39 @@
+<form [formGroup]="registerForm" (ngSubmit)="submitForm()">
+    <p>
+        <mat-form-field appearance="standard">
+            <mat-label>E-mail</mat-label>
+            <input matInput type="email" formControlName="email">
+        </mat-form-field>
+    </p>
+    <div class="warning" *ngIf="email.touched && email.invalid">
+        Please enter valid e-mail!
+    </div>
+
+    <p>
+        <mat-form-field appearance="standard">
+            <mat-label>Password</mat-label>
+            <input matInput type="password" formControlName="password">
+        </mat-form-field>
+    </p>
+    <div class="warning" *ngIf="password.touched && password.invalid">
+        Password must be at least 6 characters and contain capital letter, small letter, digit and a special character (
+        ?=.*[#$^+=!*()@%&] )!
+    </div>
+
+    <p>
+        <mat-form-field appearance="standard">
+            <mat-label>Confirm password</mat-label>
+            <input matInput type="password" formControlName="confirmPassword">
+        </mat-form-field>
+    </p>
+
+    <div class="warning" *ngIf="confirmPassword.touched && registerForm.errors?.confirmPasswordInvalid">
+        Password and confirm password must match!
+    </div>
+
+    <button type="submit" mat-raised-button color="primary">Register</button>
+
+    <div class="warning" *ngIf="formInvalid">
+        Please fill correctly the above fields!
+    </div>
+</form>

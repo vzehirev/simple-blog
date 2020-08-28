@@ -8,13 +8,13 @@ namespace articles_server_app.DtoModels
 {
     public class RegisterUserDto
     {
-        [Required, EmailAddress]
+        //[Required, EmailAddress]
         public string Email { get; set; }
 
-        [Required]
+        //[Required]
         public string Password { get; set; }
 
-        [Required]
+        //[Required]
         public string ConfirmPassword { get; set; }
     }
 }

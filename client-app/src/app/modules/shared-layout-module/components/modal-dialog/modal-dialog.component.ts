@@ -11,6 +11,6 @@ export class ModalDialogComponent implements OnInit {
   constructor(@Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit(): void {
-    this.message = this.data.message;
+    this.message = this.data.message || 'Something went wrong.';
   }
 }

@@ -53,7 +53,7 @@ namespace articles_server_app.Controllers
                     new { Message = "User creation failed! Please check user details and try again." });
             }
 
-            return Ok(new{ success = true });
+            return Ok(new { success = true });
         }
 
         [HttpPost]

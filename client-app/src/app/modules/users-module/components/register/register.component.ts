@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { RegisterModel } from '../../models/register-model';
 import { FormControl, FormGroup, Validators, ValidatorFn, ValidationErrors, AbstractControl } from '@angular/forms';
-import { UsersService } from '../../services/users.service';
+import { Router } from "@angular/router"
 import { MatDialog } from '@angular/material/dialog';
-import { ModalDialogComponent } from '../modal-dialog/modal-dialog.component';
+
+import { RegisterUserModel } from '../../models/register-user-model';
+import { UsersService } from '../../services/users.service';
+import { ModalDialogComponent } from '../../../shared-layout-module/components/modal-dialog/modal-dialog.component';
+import { LoginUserModel } from '../../models/login-user-model';
 
 @Component({
   selector: 'app-register',
@@ -12,20 +15,18 @@ import { ModalDialogComponent } from '../modal-dialog/modal-dialog.component';
 })
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
-  formInvalid: boolean;
+  isFormInvalid: boolean;
+  isLoading: boolean;
 
   get email() { return this.registerForm.get('email') };
   get password() { return this.registerForm.get('password') };
   get confirmPassword() { return this.registerForm.get('confirmPassword') };
 
-  constructor(private usersService: UsersService, public dialog: MatDialog) { }
+  constructor(private usersService: UsersService, public modalDialog: MatDialog, private router: Router) { }
 
   ngOnInit(): void {
     this.registerForm = new FormGroup({
-      email: new FormControl('', [
-        Validators.required,
-        Validators.email,
-      ]),
+      email: new FormControl('', [Validators.required, Validators.email,]),
       password: new FormControl('', this.passwordValidator()),
       confirmPassword: new FormControl('')
     }, { validators: this.confirmPasswordValidator })
@@ -33,16 +34,34 @@ export class RegisterComponent implements OnInit {
 
   submitForm() {
     if (this.registerForm.invalid) {
-      this.formInvalid = true;
+      this.isFormInvalid = true;
       return;
     }
 
-    const registerModel = new RegisterModel(this.email.value, this.password.value, this.confirmPassword.value);
+    const registerModel = new RegisterUserModel(this.email.value, this.password.value, this.confirmPassword.value);
+
+    this.isLoading = true;
 
     this.usersService.registerUser(registerModel).subscribe(
-      (response => this.handleSuccess(response)),
-      (response => this.handleError(response))
-    );
+      successResponse => this.handleSuccess(successResponse),
+      errorResponse => this.handleError(errorResponse));
+  }
+
+  handleSuccess(successResponse: any) {
+    let loginUserModel = new LoginUserModel(this.email.value, this.password.value);
+
+    this.usersService.getNewJwt(loginUserModel).subscribe(
+      (successResponse => this.usersService.persistSession(successResponse.token, this.email.value)),
+      (errorResponse => this.handleError(errorResponse)));
+
+    this.isLoading = false;
+
+    this.router.navigate(['/']);
+  }
+
+  handleError(errorResponse: any) {
+    this.isLoading = false;
+    this.modalDialog.open(ModalDialogComponent, { data: { message: errorResponse.error.message } });
   }
 
   private passwordValidator(): ValidatorFn {
@@ -57,12 +76,4 @@ export class RegisterComponent implements OnInit {
     const confirmPassword = formGroup.get('confirmPassword');
     return password && confirmPassword && password.value !== confirmPassword.value ? { confirmPasswordInvalid: true } : null;
   };
-
-  handleSuccess(response) {
-    console.log('Success!')
-  }
-
-  handleError(response) {
-    this.dialog.open(ModalDialogComponent, { data: { message: response.error.message } });
-  }
 }

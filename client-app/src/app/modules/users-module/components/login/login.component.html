@@ -1,0 +1,25 @@
+<app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+
+<form [formGroup]="loginForm" (ngSubmit)="submitForm()">
+    <p>
+        <mat-form-field appearance="standard">
+            <mat-label>E-mail</mat-label>
+            <input matInput type="email" formControlName="email">
+        </mat-form-field>
+    </p>
+    <div class="warning" *ngIf="email.touched && email.invalid">
+        Please enter valid e-mail!
+    </div>
+
+    <p>
+        <mat-form-field appearance="standard">
+            <mat-label>Password</mat-label>
+            <input matInput type="password" formControlName="password">
+        </mat-form-field>
+    </p>
+    <button type="submit" mat-raised-button color="primary">Login</button>
+
+    <div class="warning" *ngIf="isFormInvalid">
+        Please correctly fill the above fields!
+    </div>
+</form>

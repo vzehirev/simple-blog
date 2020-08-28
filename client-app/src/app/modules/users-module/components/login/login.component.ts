@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { UsersService } from '../../services/users.service';
+import { UsersService } from 'src/app/services/users.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalDialogComponent } from 'src/app/modules/shared-layout-module/components/modal-dialog/modal-dialog.component';
-import { LoginUserModel } from '../../models/login-user-model';
+import { LoginUserModel } from 'src/app/models/login-user-model';
 
 @Component({
   selector: 'app-login',
@@ -28,23 +28,23 @@ export class LoginComponent implements OnInit {
     })
   }
 
-  submitForm() {
+  submitForm(): void {
     if (this.loginForm.invalid) {
       this.isFormInvalid = true;
       return;
     }
-
-    const loginUserModel = new LoginUserModel(this.email.value, this.password.value);
-
+    
     this.isLoading = true;
 
+    let loginUserModel = new LoginUserModel(this.email.value, this.password.value);
+
     this.usersService.getNewJwt(loginUserModel).subscribe(
-      (successReponse) => this.handleSuccess(successReponse),
-      (errorResponse) => this.handleError(errorResponse)
+      successReponse => this.handleSuccess(successReponse),
+      errorResponse => this.handleError(errorResponse)
     );
   }
 
-  handleSuccess(successResponse) {
+  handleSuccess(successResponse: any): void {
     this.isLoading = false;
 
     this.usersService.persistSession(successResponse.token, this.email.value);
@@ -52,10 +52,9 @@ export class LoginComponent implements OnInit {
     this.router.navigate(['/']);
   }
 
-  handleError(errorResponse: any) {
+  handleError(errorResponse: any): void {
     this.isLoading = false;
 
-    console.log(errorResponse);
     this.modalDialog.open(ModalDialogComponent, { data: { message: errorResponse.error.message } });
   }
 }

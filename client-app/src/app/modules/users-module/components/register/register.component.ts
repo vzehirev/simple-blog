@@ -3,10 +3,10 @@ import { FormControl, FormGroup, Validators, ValidatorFn, ValidationErrors, Abst
 import { Router } from "@angular/router"
 import { MatDialog } from '@angular/material/dialog';
 
-import { RegisterUserModel } from '../../models/register-user-model';
-import { UsersService } from '../../services/users.service';
+import { RegisterUserModel } from 'src/app/models/register-user-model';
+import { LoginUserModel } from 'src/app/models/login-user-model';
+import { UsersService } from 'src/app/services/users.service';
 import { ModalDialogComponent } from '../../../shared-layout-module/components/modal-dialog/modal-dialog.component';
-import { LoginUserModel } from '../../models/login-user-model';
 
 @Component({
   selector: 'app-register',
@@ -32,7 +32,7 @@ export class RegisterComponent implements OnInit {
     }, { validators: this.confirmPasswordValidator })
   }
 
-  submitForm() {
+  submitForm(): void {
     if (this.registerForm.invalid) {
       this.isFormInvalid = true;
       return;
@@ -43,23 +43,25 @@ export class RegisterComponent implements OnInit {
     this.isLoading = true;
 
     this.usersService.registerUser(registerModel).subscribe(
-      successResponse => this.handleSuccess(successResponse),
+      () => this.handleSuccess(),
       errorResponse => this.handleError(errorResponse));
   }
 
-  handleSuccess(successResponse: any) {
+  handleSuccess(): void {
     let loginUserModel = new LoginUserModel(this.email.value, this.password.value);
 
     this.usersService.getNewJwt(loginUserModel).subscribe(
-      (successResponse => this.usersService.persistSession(successResponse.token, this.email.value)),
-      (errorResponse => this.handleError(errorResponse)));
+      successResponse => {
+        this.usersService.persistSession(successResponse.token, this.email.value);
+      }
+    );
 
     this.isLoading = false;
 
     this.router.navigate(['/']);
   }
 
-  handleError(errorResponse: any) {
+  handleError(errorResponse: any): void {
     this.isLoading = false;
     this.modalDialog.open(ModalDialogComponent, { data: { message: errorResponse.error.message } });
   }

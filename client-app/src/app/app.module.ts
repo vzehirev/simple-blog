@@ -5,7 +5,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SharedLayoutModule } from './modules/shared-layout-module/shared-layout.module';
 import { HttpClientModule } from '@angular/common/http';
-import { UsersModule } from './modules/users-module/users.module';
 
 @NgModule({
   declarations: [AppComponent],

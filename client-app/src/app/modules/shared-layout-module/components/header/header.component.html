@@ -3,12 +3,15 @@
         <mat-toolbar color="primary">
             <button class="nav-btn" mat-raised-button routerLink="/" routerLinkActive="active"
                 [routerLinkActiveOptions]="{exact: true}">HOME</button>
-            <button *ngIf="!usersService.isUserLoggedIn()" class="nav-btn" mat-raised-button routerLink="/users/login" routerLinkActive="active"
-                [routerLinkActiveOptions]="{exact: true}">LOGIN</button>
-            <button *ngIf="!usersService.isUserLoggedIn()" class="nav-btn" mat-raised-button routerLink="/users/register" routerLinkActive="active"
+            <button *ngIf="!usersService.isUserLoggedIn()" class="nav-btn" mat-raised-button routerLink="/users/login"
+                routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">LOGIN</button>
+            <button *ngIf="!usersService.isUserLoggedIn()" class="nav-btn" mat-raised-button
+                routerLink="/users/register" routerLinkActive="active"
                 [routerLinkActiveOptions]="{exact: true}">REGISTER</button>
-            <button *ngIf="usersService.isUserLoggedIn()" class="nav-btn" mat-raised-button routerLink="/users/logout" routerLinkActive="active"
-                [routerLinkActiveOptions]="{exact: true}">LOGOUT</button>
+            <a routerLink="/users/profile" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+                *ngIf="usersService.isUserLoggedIn()">Hello, {{userEmail}}</a>
+            <button *ngIf="usersService.isUserLoggedIn()" class="nav-btn" mat-raised-button routerLink="/users/logout"
+                routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">LOGOUT</button>
         </mat-toolbar>
     </nav>
 </header>

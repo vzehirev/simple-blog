@@ -8,12 +8,14 @@ import { LoginComponent } from './components/login/login.component';
 import { MaterialModule } from '../material-module/material.module';
 import { SharedLayoutModule } from '../shared-layout-module/shared-layout.module';
 import { LogoutComponent } from './components/logout/logout.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 @NgModule({
   declarations: [
     RegisterComponent,
     LoginComponent,
-    LogoutComponent
+    LogoutComponent,
+    ProfileComponent
   ],
   imports: [
     CommonModule,

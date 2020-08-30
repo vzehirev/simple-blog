@@ -63,6 +63,7 @@ namespace articles_server_app
 
             // Application services
             services.AddTransient<IJwtService, JwtService>();
+            services.AddTransient<IArticlesService, ArticlesService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

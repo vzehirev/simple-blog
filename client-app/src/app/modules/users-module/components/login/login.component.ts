@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UsersService } from 'src/app/services/users.service';
-import { MatDialog } from '@angular/material/dialog';
-import { ModalDialogComponent } from 'src/app/modules/shared-layout-module/components/modal-dialog/modal-dialog.component';
 import { LoginUserModel } from 'src/app/models/login-user-model';
 
 @Component({
@@ -16,7 +14,7 @@ export class LoginComponent implements OnInit {
   isFormInvalid: boolean;
   isLoading: boolean;
 
-  constructor(private usersService: UsersService, public modalDialog: MatDialog, private router: Router) { }
+  constructor(private usersService: UsersService, private router: Router) { }
 
   get email() { return this.loginForm.get('email') };
   get password() { return this.loginForm.get('password') };
@@ -33,7 +31,7 @@ export class LoginComponent implements OnInit {
       this.isFormInvalid = true;
       return;
     }
-    
+
     this.isLoading = true;
 
     let loginUserModel = new LoginUserModel(this.email.value, this.password.value);
@@ -47,7 +45,7 @@ export class LoginComponent implements OnInit {
   handleSuccess(successResponse: any): void {
     this.isLoading = false;
 
-    this.usersService.persistSession(successResponse.token, this.email.value);
+    this.usersService.persistSession(successResponse.token, this.email.value, successResponse.refreshToken);
 
     this.router.navigate(['/']);
   }
@@ -55,6 +53,6 @@ export class LoginComponent implements OnInit {
   handleError(errorResponse: any): void {
     this.isLoading = false;
 
-    this.modalDialog.open(ModalDialogComponent, { data: { message: errorResponse.error.message } });
+    return;
   }
 }

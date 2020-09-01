@@ -3,8 +3,6 @@ import { FormGroup, Validators, FormControl } from '@angular/forms';
 
 import { ArticlesService } from 'src/app/services/articles.service';
 import { Router } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
-import { ModalDialogComponent } from 'src/app/modules/shared-layout-module/components/modal-dialog/modal-dialog.component';
 
 @Component({
   selector: 'app-add-article',
@@ -19,7 +17,7 @@ export class AddArticleComponent implements OnInit {
   get title() { return this.addArticleForm.get('title'); }
   get content() { return this.addArticleForm.get('content'); }
 
-  constructor(private articlesSerivce: ArticlesService, private router: Router, public modalDialog: MatDialog) { }
+  constructor(private articlesSerivce: ArticlesService, private router: Router) { }
 
   ngOnInit() {
     this.addArticleForm = new FormGroup({
@@ -49,7 +47,6 @@ export class AddArticleComponent implements OnInit {
 
   private handleError(errorResponse): void {
     this.isLoading = false;
-
-    this.modalDialog.open(ModalDialogComponent, { data: { message: errorResponse.error.message } });
+    return;
   }
 }

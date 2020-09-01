@@ -30,7 +30,7 @@ namespace articles_server_app.Services
             var token = new JwtSecurityToken(
                 issuer: this.configuration["JWT:ValidIssuer"],
                 audience: this.configuration["JWT:ValidAudience"],
-                expires: DateTime.UtcNow.AddMinutes(1),
+                expires: DateTime.UtcNow.AddMinutes(15),
                 signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                 );
 

@@ -1,12 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators, ValidatorFn, ValidationErrors, AbstractControl } from '@angular/forms';
-import { Router } from "@angular/router"
-import { MatDialog } from '@angular/material/dialog';
-
+import { Router } from '@angular/router';
 import { RegisterUserModel } from 'src/app/models/register-user-model';
 import { LoginUserModel } from 'src/app/models/login-user-model';
 import { UsersService } from 'src/app/services/users.service';
-import { ModalDialogComponent } from '../../../shared-layout-module/components/modal-dialog/modal-dialog.component';
 
 @Component({
   selector: 'app-register',
@@ -22,7 +19,7 @@ export class RegisterComponent implements OnInit {
   get password() { return this.registerForm.get('password') };
   get confirmPassword() { return this.registerForm.get('confirmPassword') };
 
-  constructor(private usersService: UsersService, public modalDialog: MatDialog, private router: Router) { }
+  constructor(private usersService: UsersService, private router: Router) { }
 
   ngOnInit(): void {
     this.registerForm = new FormGroup({
@@ -52,7 +49,7 @@ export class RegisterComponent implements OnInit {
 
     this.usersService.getNewJwt(loginUserModel).subscribe(
       successResponse => {
-        this.usersService.persistSession(successResponse.token, this.email.value);
+        this.usersService.persistSession(successResponse.token, this.email.value, successResponse.refreshToken);
       }
     );
 
@@ -63,7 +60,7 @@ export class RegisterComponent implements OnInit {
 
   handleError(errorResponse: any): void {
     this.isLoading = false;
-    this.modalDialog.open(ModalDialogComponent, { data: { message: errorResponse.error.message } });
+    return;
   }
 
   private passwordValidator(): ValidatorFn {

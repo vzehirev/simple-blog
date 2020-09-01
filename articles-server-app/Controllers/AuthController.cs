@@ -39,7 +39,7 @@ namespace articles_server_app.Controllers
                     new { Message = "User already exists!" });
             }
 
-            ApplicationUser user = new ApplicationUser()
+            var user = new ApplicationUser()
             {
                 Email = model.Email,
                 UserName = model.Email,
@@ -66,9 +66,7 @@ namespace articles_server_app.Controllers
                 var jwtAccessToken = this.jwtService.GenerateNewJwtAccessToken();
                 var refreshToken = await this.jwtService.GenerateNewRefreshTokenAsync(jwtAccessToken);
 
-                SetTokensHeaderAndCookie(refreshToken);
-
-                return Ok(new { Token = jwtAccessToken });
+                return Ok(new { Token = jwtAccessToken, RefreshToken = refreshToken });
             }
 
             return Unauthorized();
@@ -85,9 +83,14 @@ namespace articles_server_app.Controllers
                 oldJwtAccessTokenString = oldJwtAccessToken.ToString().Replace("Bearer ", "");
             }
 
-            this.HttpContext.Request.Cookies.TryGetValue("RefreshToken", out var refreshToken);
+            string refreshTokenString = null;
 
-            var newJwtAccessToken = await this.jwtService.RefreshJwtAccessTokenAsync(oldJwtAccessTokenString, refreshToken);
+            if (this.HttpContext.Request.Headers.TryGetValue("Refresh", out var refreshToken))
+            {
+                refreshTokenString = refreshToken.ToString();
+            }
+
+            var newJwtAccessToken = await this.jwtService.RefreshJwtAccessTokenAsync(oldJwtAccessTokenString, refreshTokenString);
 
             if (newJwtAccessToken == null)
             {
@@ -96,24 +99,7 @@ namespace articles_server_app.Controllers
 
             var newRefreshToken = await this.jwtService.GenerateNewRefreshTokenAsync(newJwtAccessToken);
 
-            SetTokensHeaderAndCookie(newRefreshToken);
-
-            return Ok(new { Token = newJwtAccessToken });
-        }
-
-        private void SetTokensHeaderAndCookie(string refreshToken)
-        {
-            var refreshTokenCookieOptions = new CookieOptions
-            {
-                MaxAge = TimeSpan.FromDays(90),
-                HttpOnly = true,
-                IsEssential = true,
-                SameSite = SameSiteMode.Strict,
-                Secure = true,
-                Path = "/auth/refresh"
-            };
-
-            this.Response.Cookies.Append("RefreshToken", refreshToken, refreshTokenCookieOptions);
+            return Ok(new { Token = newJwtAccessToken, RefreshToken = newRefreshToken });
         }
     }
 }

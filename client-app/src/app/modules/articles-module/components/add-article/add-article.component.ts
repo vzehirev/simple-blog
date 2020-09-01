@@ -12,7 +12,6 @@ import { Router } from '@angular/router';
 export class AddArticleComponent implements OnInit {
   addArticleForm: FormGroup;
   isFormInvalid: boolean;
-  isLoading: boolean;
 
   get title() { return this.addArticleForm.get('title'); }
   get content() { return this.addArticleForm.get('content'); }
@@ -32,21 +31,12 @@ export class AddArticleComponent implements OnInit {
       return;
     }
 
-    this.isLoading = true;
-
     this.articlesSerivce.addArticle(this.title.value, this.content.value).subscribe(
-      successResponse => this.handleSuccess(),
-      errorResponse => this.handleError(errorResponse)
-    )
+      () => this.handleSuccess()
+    );
   }
 
   private handleSuccess(): void {
-    this.isLoading = false;
     this.router.navigate(['/']);
-  }
-
-  private handleError(errorResponse): void {
-    this.isLoading = false;
-    return;
   }
 }

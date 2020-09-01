@@ -13,7 +13,6 @@ import { UsersService } from 'src/app/services/users.service';
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
   isFormInvalid: boolean;
-  isLoading: boolean;
 
   get email() { return this.registerForm.get('email') };
   get password() { return this.registerForm.get('password') };
@@ -37,11 +36,8 @@ export class RegisterComponent implements OnInit {
 
     const registerModel = new RegisterUserModel(this.email.value, this.password.value, this.confirmPassword.value);
 
-    this.isLoading = true;
-
     this.usersService.registerUser(registerModel).subscribe(
-      () => this.handleSuccess(),
-      errorResponse => this.handleError(errorResponse));
+      () => this.handleSuccess());
   }
 
   handleSuccess(): void {
@@ -53,14 +49,7 @@ export class RegisterComponent implements OnInit {
       }
     );
 
-    this.isLoading = false;
-
     this.router.navigate(['/']);
-  }
-
-  handleError(errorResponse: any): void {
-    this.isLoading = false;
-    return;
   }
 
   private passwordValidator(): ValidatorFn {

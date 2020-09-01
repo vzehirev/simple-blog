@@ -1,9 +1,7 @@
-<app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
-
 <div class="form-container">
     <form [formGroup]="addArticleForm" (ngSubmit)="submitForm()">
         <p>
-            <mat-form-field appearance="standard">
+            <mat-form-field appearance="standard" class="width-95">
                 <mat-label>Title</mat-label>
                 <input matInput type="text" formControlName="title">
             </mat-form-field>
@@ -13,9 +11,9 @@
         </div>
 
         <p>
-            <mat-form-field appearance="standard">
+            <mat-form-field appearance="standard" class="width-95">
                 <mat-label>Content</mat-label>
-                <textarea rows="10" cols="20" matInput type="text" formControlName="content"></textarea>
+                <textarea rows="20" matInput formControlName="content"></textarea>
             </mat-form-field>
         </p>
         <div class="warning" *ngIf="content.touched && content.invalid">
@@ -23,7 +21,7 @@
         </div>
 
         <button type="submit" mat-raised-button color="primary">Add article</button>
-        <button routerLink="/users/profile" mat-raised-button>Close</button>
+        <button type="button" routerLink="/users/profile" mat-raised-button>Close</button>
 
         <div class="warning" *ngIf="isFormInvalid">
             Please correctly fill the above fields!

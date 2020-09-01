@@ -29,16 +29,16 @@ namespace articles_server_app.Services
                 .ToArrayAsync();
         }
 
-        public async Task<int> AddArticle(string title, string content, string userId)
+        public async Task<int> AddArticle(ArticleDto article, string userId)
         {
-            var article = new Article
+            var articleToAdd = new Article
             {
-                Title = title,
-                Content = content,
+                Title = article.Title,
+                Content = article.Content,
                 UserId = userId
             };
 
-            this.dbContext.Articles.Add(article);
+            this.dbContext.Articles.Add(articleToAdd);
             return await this.dbContext.SaveChangesAsync();
         }
     }

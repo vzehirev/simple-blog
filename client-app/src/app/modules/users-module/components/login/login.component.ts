@@ -12,7 +12,6 @@ import { LoginUserModel } from 'src/app/models/login-user-model';
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   isFormInvalid: boolean;
-  isLoading: boolean;
 
   constructor(private usersService: UsersService, private router: Router) { }
 
@@ -32,27 +31,16 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    this.isLoading = true;
-
     let loginUserModel = new LoginUserModel(this.email.value, this.password.value);
 
     this.usersService.getNewJwt(loginUserModel).subscribe(
-      successReponse => this.handleSuccess(successReponse),
-      errorResponse => this.handleError(errorResponse)
+      successReponse => this.handleSuccess(successReponse)
     );
   }
 
   handleSuccess(successResponse: any): void {
-    this.isLoading = false;
-
     this.usersService.persistSession(successResponse.token, this.email.value, successResponse.refreshToken);
 
     this.router.navigate(['/']);
-  }
-
-  handleError(errorResponse: any): void {
-    this.isLoading = false;
-
-    return;
   }
 }

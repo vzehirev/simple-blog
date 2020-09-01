@@ -7,6 +7,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { ErrorHandlingInterceptor } from './interceptors/error-handling.interceptor';
+import { LoadingSpinnerInterceptor } from './interceptors/loading-spinner.interceptor';
 
 @NgModule({
   declarations: [AppComponent],
@@ -18,6 +19,11 @@ import { ErrorHandlingInterceptor } from './interceptors/error-handling.intercep
     HttpClientModule
   ],
   providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: LoadingSpinnerInterceptor,
+      multi: true
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,

@@ -10,6 +10,6 @@ namespace articles_server_app.Services
     {
         Task<IEnumerable<ArticleDto>> GetAll(string userId);
 
-        Task<int> AddArticle(string title, string content, string userId);
+        Task<int> AddArticle(ArticleDto article, string userId);
     }
 }

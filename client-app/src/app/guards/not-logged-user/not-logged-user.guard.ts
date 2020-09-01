@@ -11,7 +11,7 @@ export class NotLoggedUserGuard implements CanActivate {
 
   canActivate(): boolean {
     if (!this.usersService.isUserLoggedIn()) {
-      this.router.navigate(['/']);
+      this.router.navigate(['/users/login']);
     }
 
     return this.usersService.isUserLoggedIn();

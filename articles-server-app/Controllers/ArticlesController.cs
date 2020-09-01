@@ -34,9 +34,9 @@ namespace articles_server_app.Controllers
         [Route("add-article")]
         [Authorize]
         [HttpPost]
-        public async Task<int> AddArticle(string title, string content)
+        public async Task<int> AddArticle([FromBody] ArticleDto article)
         {
-            return await this.articlesService.AddArticle(title, content, this.usersManager.GetUserId(this.User));
+            return await this.articlesService.AddArticle(article, this.usersManager.GetUserId(this.User));
         }
     }
 }

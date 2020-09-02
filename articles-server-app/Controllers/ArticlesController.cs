@@ -63,5 +63,15 @@ namespace articles_server_app.Controllers
 
             return await this.articlesService.DeleteArticle(articleId, userId);
         }
+
+        [Route("edit")]
+        [Authorize]
+        [HttpPatch]
+        public async Task<bool> Edit(EditArticleDto article)
+        {
+            var userId = this.usersManager.GetUserId(this.User);
+
+            return await this.articlesService.EditArticle(article, userId);
+        }
     }
 }

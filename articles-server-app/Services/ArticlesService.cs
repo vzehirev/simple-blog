@@ -68,5 +68,18 @@ namespace articles_server_app.Services
 
             return await this.dbContext.SaveChangesAsync() > 0;
         }
+
+        public async Task<bool> EditArticle(EditArticleDto article, string userId)
+        {
+            var oldArticle = await this.dbContext.Articles.FindAsync(article.Id);
+
+            if (oldArticle != null && oldArticle.UserId == userId)
+            {
+                oldArticle.Title = article.Title;
+                oldArticle.Content = article.Content;
+            }
+
+            return await this.dbContext.SaveChangesAsync() > 0;
+        }
     }
 }

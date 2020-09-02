@@ -21,8 +21,8 @@ export class ArticlesService {
     return this.httpClient.get<ArticleViewModel[]>(Endpoints.Server + Endpoints.GetAllArticles);
   }
 
-  editArticle(article: EditArticleModel): Observable<any> {
-    return this.httpClient.patch(Endpoints.Server + Endpoints.EditArticle, article);
+  editArticle(article: EditArticleModel): Observable<boolean> {
+    return this.httpClient.patch<boolean>(Endpoints.Server + Endpoints.EditArticle, article);
   }
 
   isCreator(articleId: number): Observable<boolean> {

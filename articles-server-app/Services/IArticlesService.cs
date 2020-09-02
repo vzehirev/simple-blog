@@ -15,5 +15,7 @@ namespace articles_server_app.Services
         Task<bool> IsCreator(int articleId, string userId);
 
         Task<bool> DeleteArticle(int articleId, string userId);
+
+        Task<bool> EditArticle(EditArticleDto article, string userId);
     }
 }

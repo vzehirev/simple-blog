@@ -10,6 +10,10 @@ namespace articles_server_app.Services
     {
         Task<IEnumerable<ArticleDto>> GetAll(string userId);
 
-        Task<int> AddArticle(ArticleDto article, string userId);
+        Task<int> AddArticle(AddArticleDto article, string userId);
+
+        Task<bool> IsCreator(int articleId, string userId);
+
+        Task<bool> DeleteArticle(int articleId, string userId);
     }
 }

@@ -1,0 +1,14 @@
+.btn {
+    display: inline-block;
+    margin: 1rem 0 auto;
+}
+
+.dialog-container {
+    display: inline-block;
+    text-align: center;
+    word-break: break-all;
+}
+
+p {
+    text-align: left;
+}

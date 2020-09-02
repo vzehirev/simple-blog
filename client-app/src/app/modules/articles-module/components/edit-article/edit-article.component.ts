@@ -3,35 +3,36 @@ import { FormGroup, Validators, FormControl } from '@angular/forms';
 
 import { ArticlesService } from 'src/app/services/articles.service';
 import { Router } from '@angular/router';
+import { EditArticleModel } from 'src/app/models/edit-article-model';
 
 @Component({
-  selector: 'app-add-article',
-  templateUrl: './add-article.component.html',
-  styleUrls: ['./add-article.component.css']
+  selector: 'app-edit-article',
+  templateUrl: './edit-article.component.html',
+  styleUrls: ['./edit-article.component.css']
 })
-export class AddArticleComponent implements OnInit {
-  addArticleForm: FormGroup;
+export class EditArticleComponent implements OnInit {
+  editArticleForm: FormGroup;
   isFormInvalid: boolean;
 
-  get title() { return this.addArticleForm.get('title'); }
-  get content() { return this.addArticleForm.get('content'); }
+  get title() { return this.editArticleForm.get('title'); }
+  get content() { return this.editArticleForm.get('content'); }
 
   constructor(private articlesSerivce: ArticlesService, private router: Router) { }
 
   ngOnInit() {
-    this.addArticleForm = new FormGroup({
+    this.editArticleForm = new FormGroup({
       title: new FormControl('', [Validators.required, Validators.minLength(10)]),
       content: new FormControl('', [Validators.required, Validators.minLength(100)])
     })
   }
 
   submitForm() {
-    if (this.addArticleForm.invalid) {
+    if (this.editArticleForm.invalid) {
       this.isFormInvalid = true;
       return;
     }
 
-    this.articlesSerivce.addArticle(this.title.value, this.content.value).subscribe(() => this.handleSuccess());
+    this.articlesSerivce.editArticle(new EditArticleModel(1, '', '')).subscribe(() => this.handleSuccess());
   }
 
   private handleSuccess(): void {

@@ -8,10 +8,10 @@ export class LoadingSpinnerService {
   isLoading = new Subject<boolean>();
 
   show(): void {
-    this.isLoading.next(true);
+    setTimeout(() => { this.isLoading.next(true) });
   }
 
   hide(): void {
-    this.isLoading.next(false);
+    setTimeout(() => { this.isLoading.next(false) });
   }
 }

@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace articles_server_app.Services
@@ -22,6 +24,7 @@ namespace articles_server_app.Services
         {
             return await this.dbContext.Articles.Select(a => new ArticleDto
             {
+                Id = a.Id,
                 Title = a.Title,
                 Content = a.Content,
                 IsCreator = a.UserId == userId
@@ -29,7 +32,7 @@ namespace articles_server_app.Services
                 .ToArrayAsync();
         }
 
-        public async Task<int> AddArticle(ArticleDto article, string userId)
+        public async Task<int> AddArticle(AddArticleDto article, string userId)
         {
             var articleToAdd = new Article
             {
@@ -40,6 +43,30 @@ namespace articles_server_app.Services
 
             this.dbContext.Articles.Add(articleToAdd);
             return await this.dbContext.SaveChangesAsync();
+        }
+
+        public async Task<bool> IsCreator(int articleId, string userId)
+        {
+            var article = await this.dbContext.Articles.SingleOrDefaultAsync(a => a.Id == articleId);
+
+            if (article != null)
+            {
+                return article.UserId == userId;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> DeleteArticle(int articleId, string userId)
+        {
+            var article = await this.dbContext.Articles.SingleOrDefaultAsync(a => a.Id == articleId);
+
+            if (article != null && article.UserId == userId)
+            {
+                this.dbContext.Articles.Remove(article);
+            }
+
+            return await this.dbContext.SaveChangesAsync() > 0;
         }
     }
 }

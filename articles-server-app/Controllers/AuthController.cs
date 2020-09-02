@@ -1,4 +1,8 @@
 ﻿using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using articles_server_app.Data.Models;
 using articles_server_app.DtoModels;
@@ -63,7 +67,7 @@ namespace articles_server_app.Controllers
             var user = await userManager.FindByNameAsync(model.Email);
             if (user != null && await userManager.CheckPasswordAsync(user, model.Password))
             {
-                var jwtAccessToken = this.jwtService.GenerateNewJwtAccessToken();
+                var jwtAccessToken = this.jwtService.GenerateNewJwtAccessToken(user.Id);
                 var refreshToken = await this.jwtService.GenerateNewRefreshTokenAsync(jwtAccessToken);
 
                 return Ok(new { Token = jwtAccessToken, RefreshToken = refreshToken });
@@ -90,7 +94,15 @@ namespace articles_server_app.Controllers
                 refreshTokenString = refreshToken.ToString();
             }
 
-            var newJwtAccessToken = await this.jwtService.RefreshJwtAccessTokenAsync(oldJwtAccessTokenString, refreshTokenString);
+            var userId = new JwtSecurityToken(oldJwtAccessTokenString).Claims
+                .SingleOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value;
+
+            if (oldJwtAccessTokenString == null || refreshTokenString == null || userId == null)
+            {
+                return Unauthorized();
+            }
+
+            var newJwtAccessToken = await this.jwtService.RefreshJwtAccessTokenAsync(oldJwtAccessTokenString, refreshTokenString, userId.ToString());
 
             if (newJwtAccessToken == null)
             {

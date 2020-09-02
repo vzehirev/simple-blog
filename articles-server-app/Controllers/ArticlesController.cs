@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using articles_server_app.Data;
 using articles_server_app.Data.Models;
@@ -8,6 +9,7 @@ using articles_server_app.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration.UserSecrets;
 
 namespace articles_server_app.Controllers
 {
@@ -34,9 +36,32 @@ namespace articles_server_app.Controllers
         [Route("add-article")]
         [Authorize]
         [HttpPost]
-        public async Task<int> AddArticle([FromBody] ArticleDto article)
+        public async Task<int> AddArticle([FromBody] AddArticleDto article)
         {
-            return await this.articlesService.AddArticle(article, this.usersManager.GetUserId(this.User));
+            string userId = this.usersManager.GetUserId(this.User);
+
+            return await this.articlesService.AddArticle(article,
+                this.User.Claims.SingleOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value);
+        }
+
+        [Route("is-creator/{articleId}")]
+        [Authorize]
+        [HttpGet]
+        public async Task<bool> IsCreator(int articleId)
+        {
+            var userId = this.usersManager.GetUserId(this.User);
+
+            return await this.articlesService.IsCreator(articleId, userId);
+        }
+
+        [Route("delete/{articleId}")]
+        [Authorize]
+        [HttpDelete]
+        public async Task<bool> Delete(int articleId)
+        {
+            var userId = this.usersManager.GetUserId(this.User);
+
+            return await this.articlesService.DeleteArticle(articleId, userId);
         }
     }
 }

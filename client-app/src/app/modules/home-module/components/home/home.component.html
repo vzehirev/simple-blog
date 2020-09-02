@@ -1,1 +1,3 @@
-<p>this is homeee!</p>
+<div *ngFor="let article of articles" class="articles-container">
+    <app-article-home-card [article]="article" (articleId)='delete($event)'></app-article-home-card>
+</div>

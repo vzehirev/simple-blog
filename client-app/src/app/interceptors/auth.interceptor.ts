@@ -19,7 +19,10 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(private usersService: UsersService) { }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    if (request.url.includes(Endpoints.Login) || request.url.includes(Endpoints.RefreshJwt) || request.url.includes(Endpoints.Register)) {
+    if (request.url.includes(Endpoints.Login)
+    || request.url.includes(Endpoints.RefreshJwt)
+    || request.url.includes(Endpoints.Register)
+    || !this.usersService.isUserLoggedIn()) {
       return next.handle(request);
     }
 

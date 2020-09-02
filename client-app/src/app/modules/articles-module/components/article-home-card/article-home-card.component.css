@@ -1,0 +1,11 @@
+.article-card {
+    margin-bottom: 2rem;
+}
+
+.card-header {
+    justify-content: center;
+}
+
+.card-actions {
+    text-align: center;
+}

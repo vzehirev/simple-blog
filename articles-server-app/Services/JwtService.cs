@@ -3,10 +3,12 @@ using articles_server_app.Data.Models;
 using articles_server_app.DtoModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -23,7 +25,7 @@ namespace articles_server_app.Services
             this.dbContext = dbContext;
         }
 
-        public string GenerateNewJwtAccessToken()
+        public string GenerateNewJwtAccessToken(string userId)
         {
             var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.configuration["JWT:Secret"]));
 
@@ -31,6 +33,7 @@ namespace articles_server_app.Services
                 issuer: this.configuration["JWT:ValidIssuer"],
                 audience: this.configuration["JWT:ValidAudience"],
                 expires: DateTime.UtcNow.AddMinutes(15),
+                claims: new Claim[] { new Claim(ClaimTypes.NameIdentifier, userId) },
                 signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                 );
 
@@ -52,16 +55,11 @@ namespace articles_server_app.Services
             return refreshToken.Token;
         }
 
-        public async Task<string> RefreshJwtAccessTokenAsync(string oldJwtAccessToken, string refreshToken)
+        public async Task<string> RefreshJwtAccessTokenAsync(string oldJwtAccessToken, string refreshToken, string userId)
         {
             var refreshTokenModel = await this.dbContext.RefreshTokens.SingleOrDefaultAsync(x => x.Token == refreshToken);
 
-            if (refreshTokenModel == null)
-            {
-                return null;
-
-            }
-            else if (refreshTokenModel.JwtAccessToken != oldJwtAccessToken || refreshTokenModel.ExpiresAt < DateTime.UtcNow)
+            if (refreshTokenModel.JwtAccessToken != oldJwtAccessToken || refreshTokenModel.ExpiresAt < DateTime.UtcNow)
             {
                 refreshTokenModel.ExpiresAt = DateTime.UtcNow;
                 dbContext.RefreshTokens.Update(refreshTokenModel);
@@ -70,7 +68,7 @@ namespace articles_server_app.Services
                 return null;
             }
 
-            return this.GenerateNewJwtAccessToken();
+            return this.GenerateNewJwtAccessToken(userId);
         }
     }
 }

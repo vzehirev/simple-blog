@@ -3,5 +3,9 @@ export const Endpoints = {
     Register: '/auth/register',
     Login: '/auth/login',
     RefreshJwt: '/auth/refresh',
-    AddArticle: '/articles/add-article'
+    AddArticle: '/articles/add-article',
+    GetAllArticles: '/articles/get-all',
+    EditArticle: '/articles/edit',
+    IsCreator: '/articles/is-creator',
+    DeleteArticle: '/articles/delete'
 }

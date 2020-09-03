@@ -1,10 +1,10 @@
 using System;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using articles_server_app.Articles.Services;
 using articles_server_app.Data;
 using articles_server_app.Data.Models;
-using articles_server_app.Services;
+using articles_server_app.Jwt.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -26,7 +26,6 @@ namespace articles_server_app
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
@@ -36,7 +35,8 @@ namespace articles_server_app
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>(options => options.ClaimsIdentity.UserIdClaimType = ClaimTypes.NameIdentifier)
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+                    options.ClaimsIdentity.UserIdClaimType = ClaimTypes.NameIdentifier)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -67,7 +67,6 @@ namespace articles_server_app
             services.AddTransient<IArticlesService, ArticlesService>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             var allowedCorsOrigins = Configuration.GetSection("AllowedCorsOrigins").Get<string[]>();

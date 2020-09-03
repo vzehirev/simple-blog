@@ -1,0 +1,30 @@
+<div class="form-container">
+    <form [formGroup]="addArticleForm" (ngSubmit)="submitForm()">
+        <p>
+            <mat-form-field appearance="standard" class="width-95">
+                <mat-label>Title</mat-label>
+                <input matInput type="text" formControlName="title">
+            </mat-form-field>
+        </p>
+        <div class="warning" *ngIf="title.touched && title.invalid">
+            Title must be between 10 and 100 characters!
+        </div>
+
+        <p>
+            <mat-form-field appearance="standard" class="width-95">
+                <mat-label>Content</mat-label>
+                <textarea rows="20" matInput formControlName="content"></textarea>
+            </mat-form-field>
+        </p>
+        <div class="warning" *ngIf="content.touched && content.invalid">
+            Article must be between 100 and 1000 characters!
+        </div>
+
+        <button type="submit" mat-raised-button color="primary">Add article</button>
+        <button type="button" routerLink="/users/profile" mat-raised-button>Close</button>
+
+        <div class="warning" *ngIf="isFormInvalid">
+            Please correctly fill the above fields!
+        </div>
+    </form>
+</div>

@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace articles_server_app.Data.Models
+namespace articles_server_app.Articles.DtoModels
 {
-    public class Article
+    public class EditArticleDto
     {
-        [Required, Key]
+        [Required]
         public int Id { get; set; }
 
         [Required, MinLength(10), MaxLength(100)]
@@ -12,10 +12,5 @@ namespace articles_server_app.Data.Models
 
         [Required, MinLength(100), MaxLength(1000)]
         public string Content { get; set; }
-
-        [Required]
-        public string UserId { get; set; }
-
-        public ApplicationUser User { get; set; }
     }
 }

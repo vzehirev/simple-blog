@@ -1,0 +1,32 @@
+<div class="dialog-container">
+    <div class="form-container">
+        <form [formGroup]="editArticleForm" (ngSubmit)="submitForm()">
+            <p>
+                <mat-form-field appearance="standard" class="width-95">
+                    <mat-label>Title</mat-label>
+                    <input matInput type="text" formControlName="title">
+                </mat-form-field>
+            </p>
+            <div class="warning" *ngIf="newTitle.touched && newTitle.invalid">
+                Title must be between 10 and 100 characters!
+            </div>
+
+            <p>
+                <mat-form-field appearance="standard" class="width-95">
+                    <mat-label>Content</mat-label>
+                    <textarea rows="20" matInput formControlName="content"></textarea>
+                </mat-form-field>
+            </p>
+            <div class="warning" *ngIf="newContent.touched && newContent.invalid">
+                Article must be between 100 and 1000 characters!
+            </div>
+            <div class="buttons">
+                <button type="submit" mat-raised-button color="primary">Edit</button>
+                <button type="button" mat-raised-button mat-dialog-close color="primary">Close</button>
+            </div>
+            <div class="warning" *ngIf="isFormInvalid">
+                Please correctly fill the above fields!
+            </div>
+        </form>
+    </div>
+</div>

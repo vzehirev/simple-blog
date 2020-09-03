@@ -1,12 +1,11 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using articles_server_app.Data.Models;
-using articles_server_app.DtoModels;
-using articles_server_app.Services;
+using articles_server_app.Jwt.Services;
+using articles_server_app.Users.DtoModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -51,13 +50,14 @@ namespace articles_server_app.Controllers
             };
 
             var result = await userManager.CreateAsync(user, model.Password);
+
             if (!result.Succeeded)
             {
                 return StatusCode(StatusCodes.Status400BadRequest,
-                    new { Message = "User creation failed! Please check user details and try again." });
+                    new { Message = "User creation failed!" });
             }
 
-            return Ok(new { success = true });
+            return Ok();
         }
 
         [HttpPost]
@@ -102,7 +102,8 @@ namespace articles_server_app.Controllers
                 return Unauthorized();
             }
 
-            var newJwtAccessToken = await this.jwtService.RefreshJwtAccessTokenAsync(oldJwtAccessTokenString, refreshTokenString, userId.ToString());
+            var newJwtAccessToken = await this.jwtService
+                .RefreshJwtAccessTokenAsync(oldJwtAccessTokenString, refreshTokenString, userId.ToString());
 
             if (newJwtAccessToken == null)
             {

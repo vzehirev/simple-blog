@@ -2,12 +2,12 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
-import { SharedLayoutModule } from './modules/shared-layout-module/shared-layout.module';
+import { SharedLayoutModule } from './modules/shared-layout/shared-layout.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppComponent } from './app.component';
-import { AuthInterceptor } from './interceptors/auth.interceptor';
-import { ErrorHandlingInterceptor } from './interceptors/error-handling.interceptor';
-import { LoadingSpinnerInterceptor } from './interceptors/loading-spinner.interceptor';
+import { AuthInterceptor } from './interceptors/auth/auth.interceptor';
+import { ErrorHandlingInterceptor } from './interceptors/error-handling/error-handling.interceptor';
+import { LoadingSpinnerInterceptor } from './interceptors/loading-spinner/loading-spinner.interceptor';
 
 @NgModule({
   declarations: [AppComponent],

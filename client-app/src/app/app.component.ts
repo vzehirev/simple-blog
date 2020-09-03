@@ -1,7 +1,6 @@
-import { Component, OnInit, AfterContentInit, ChangeDetectorRef, AfterViewChecked } from '@angular/core';
-import { LoadingSpinnerService } from './services/loading-spinner.service';
+import { Component, OnInit } from '@angular/core';
+import { LoadingSpinnerService } from './services/loading-spinner/loading-spinner.service';
 import { Subject } from 'rxjs';
-import { LIVE_ANNOUNCER_DEFAULT_OPTIONS } from '@angular/cdk/a11y';
 
 @Component({
   selector: 'app-root',

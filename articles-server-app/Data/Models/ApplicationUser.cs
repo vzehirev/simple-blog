@@ -6,6 +6,6 @@ namespace articles_server_app.Data.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        public IEnumerable<Article> Articles { get; set; }
+        public ISet<Article> Articles { get; set; } = new HashSet<Article>();
     }
 }
